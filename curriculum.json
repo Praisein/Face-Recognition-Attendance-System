@@ -1,0 +1,100 @@
+{
+  "_comment":"use year of the batch according to you for me it was First Year Second Year etc so F.Y, S.Y, T.Y",
+  "F.Y": {
+    "Semesters": {
+      "Sem-1": {
+        "Current": true,
+        "Theory": [
+          "Programming Principles with C (Theory)",
+          "Operating System (Theory)",
+          "Computer Networks(Theory)",
+          "Digital Electronics"
+        ],
+        "Practicals": [
+          "Programming Principles with C (Practicals)",
+          "Computer Networks(Practicals)",
+          "Operating System Practical"
+        ],
+        "Selective": [
+          "Hindi",
+          "Marathi",
+          "BK"
+        ]
+      },
+      "Sem-2": {
+        "Current": false,
+        "Theory": [
+          "OOPs with C++(Theory)",
+          "Web Designing & development(Theory)",
+          "Microprocessor and Architecture(Theory)",
+          "Embedded Systems (Theory)"
+        ],
+        "Practicals": [
+          "OOPs with C++(Practical)",
+          "Embedded Systems(Practical)",
+          "Digital Electronics Practicals"
+        ]
+      }
+    }
+  },
+  "S.Y": {
+    "Semesters": {
+      "Sem-3": {
+        "Current": true,
+        "Theory": [
+          "Data Structure and Algorithm",
+          "Numerical & Statistical methods",
+          "Wireless sensor"
+        ],
+        "Practicals": [
+          "Database Management System Practical",
+          "Microprocessor and Architecture(Practical)",
+          "Python Programming Practical"
+        ]
+      },
+      "Sem-4": {
+        "Current": false,
+        "Theory": [
+          "Introduction to Machine Learning",
+          "Discrete Mathematics",
+          "Internet of Things"
+        ],
+        "Practicals": [
+          "Core Java Practical",
+          "Internet of Things Practical",
+          "Artificial Intelligence Practical"
+        ]
+      }
+    }
+  },
+  "T.Y": {
+    "Semesters": {
+      "Sem-5": {
+        "Current": true,
+        "Theory": [
+          "Artificial Intelligence",
+          "Enterprise java",
+          "Cyber Laws"
+        ],
+        "Practicals": [
+          "Enterprise Java App Development Practical",
+          "Android Mobile Programming Practical",
+          "Data Science Practical"
+        ]
+      },
+      "Sem-6": {
+        "Current": false,
+        "Theory": [
+          "Software Quality Assurance",
+          "Business Intelligence",
+          "GIS (Principles of Geographic Information System) Theory",
+          "Security In Computing (Theory)"
+        ],
+        "Practicals": [
+          "Data Analysis and visulasation Practical",
+          "Security In Computing Practical"
+        ]
+      }
+    }
+  }
+}

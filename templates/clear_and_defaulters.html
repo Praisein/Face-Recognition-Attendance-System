@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+
+{% block title %}Clear & Defaulters - Attendance System{% endblock %}
+
+{% block body_class %}clear-defaulters-page{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-header h3 {
+        color: #374151;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        color: #6b7280;
+        margin: 0;
+    }
+
+    .summary-table {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .summary-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .summary-table th,
+    .summary-table td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .summary-table th {
+        background: #f8fafc;
+        font-weight: 600;
+        color: #374151;
+        width: 60%;
+    }
+
+    .summary-table td {
+        font-weight: 500;
+        color: #6b7280;
+    }
+
+    .threshold-form {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .form-inline {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .form-control {
+        padding: 10px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        width: 120px;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        background: #667eea;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #5a6fd8;
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-primary {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .btn-outline-primary:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .btn-success {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background: #059669;
+        transform: translateY(-2px);
+    }
+
+    .btn-info {
+        background: #06b6d4;
+        color: white;
+    }
+
+    .btn-info:hover {
+        background: #0891b2;
+        transform: translateY(-2px);
+    }
+
+    .section-header {
+        color: #374151;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 32px 0 16px 0;
+        padding-bottom: 8px;
+        border-bottom: 2px solid;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-header.clear {
+        color: #065f46;
+        border-bottom-color: #10b981;
+    }
+
+    .section-header.defaulter {
+        color: #991b1b;
+        border-bottom-color: #ef4444;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 24px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table thead {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .table th {
+        padding: 16px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .table td {
+        padding: 16px;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 14px;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .table-striped tbody tr:nth-child(even) {
+        background-color: #f9fafb;
+    }
+
+    .table-striped tbody tr:nth-child(even):hover {
+        background-color: #f3f4f6;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6b7280;
+    }
+
+    .empty-state svg {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+        color: #d1d5db;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+    }
+
+    .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .icon-lg {
+        width: 20px;
+        height: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .form-inline {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-control {
+            width: 100%;
+        }
+
+        .threshold-form {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn {
+            justify-content: center;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            min-width: 600px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <h3>
+        <svg class="icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+        Attendance Status - {{ lecture }}
+    </h3>
+    <p>
+        <strong>Teacher:</strong> {{ teacher_name }}
+    </p>
+</div>
+
+<!-- Summary Table -->
+<div class="summary-table">
+    <table>
+        <tr>
+            <th>Total Classes Conducted</th>
+            <td>{{ total_classes }}</td>
+        </tr>
+        <tr>
+            <th>Threshold (%)</th>
+            <td>{{ threshold }}</td>
+        </tr>
+        <tr>
+            <th>Total Students</th>
+            <td>{{ total_students }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Threshold Form -->
+<div class="threshold-form">
+    <form method="POST" class="form-inline">
+        <label style="font-weight: 500; color: #374151;">Threshold (%):</label>
+        <input type="number" name="threshold" value="{{ threshold }}" class="form-control" min="1" max="100" required>
+        <button type="submit" class="btn btn-primary">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Apply
+        </button>
+    </form>
+</div>
+
+<!-- Clear Students Section -->
+<h4 class="section-header clear">
+    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    Clear Students (≥ {{ threshold }}%)
+</h4>
+<div class="table-container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Classes Attended</th>
+                <th>Attendance %</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for s in clear_students %}
+            <tr>
+                <td><strong>{{ s[0] }}</strong></td>
+                <td>{{ s[1] }}</td>
+                <td>{{ s[2] }}</td>
+                <td style="color: #065f46; font-weight: 600;">{{ s[3] }}%</td>
+            </tr>
+        {% endfor %}
+        {% if clear_students|length == 0 %}
+            <tr>
+                <td colspan="4" class="empty-state">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <br>
+                    No students are clear yet.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Defaulters Section -->
+<h4 class="section-header defaulter">
+    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+    </svg>
+    Defaulters (< {{ threshold }}%)
+</h4>
+<div class="table-container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Classes Attended</th>
+                <th>Attendance %</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for d in defaulters %}
+            <tr>
+                <td><strong>{{ d[0] }}</strong></td>
+                <td>{{ d[1] }}</td>
+                <td>{{ d[2] }}</td>
+                <td style="color: #991b1b; font-weight: 600;">{{ d[3] }}%</td>
+            </tr>
+        {% endfor %}
+        {% if defaulters|length == 0 %}
+            <tr>
+                <td colspan="4" class="empty-state">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <br>
+                    No defaulters 🎉
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <a href="{{ url_for('attendance_records') }}" class="btn btn-outline-primary">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Records
+    </a>
+    <a href="{{ url_for('download_clear_defaulters', filetype='excel', threshold=threshold) }}" class="btn btn-success">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Download to Excel
+    </a>
+    <a href="{{ url_for('download_clear_defaulters', filetype='word', threshold=threshold) }}" class="btn btn-info">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Download to Word
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation for threshold input
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const thresholdInput = document.querySelector('input[name="threshold"]');
+        const thresholdValue = parseInt(thresholdInput.value);
+        
+        if (thresholdValue < 1 || thresholdValue > 100) {
+            e.preventDefault();
+            alert('Please enter a threshold value between 1 and 100.');
+            thresholdInput.focus();
+            return false;
+        }
+    });
+
+    // Add some interactivity to the tables
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableRows = document.querySelectorAll('.table tbody tr');
+        
+        tableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                this.style.backgroundColor = '#f0f9ff';
+                setTimeout(() => {
+                    this.style.backgroundColor = '';
+                }, 500);
+            });
+        });
+
+        console.log('Clear & Defaulters page loaded successfully');
+    });
+</script>
+{% endblock %}

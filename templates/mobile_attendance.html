@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Face Recognition - Attendance System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8fafc;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .mobile-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .camera-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .camera-section h2 {
+            margin-bottom: 16px;
+            color: #374151;
+        }
+
+        .video-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #cameraVideo {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 8px;
+            border: 3px solid #e5e7eb;
+            background: #f3f4f6;
+        }
+
+        #captureCanvas {
+            display: none;
+        }
+
+        .camera-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 200px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-section h3 {
+            margin-bottom: 12px;
+            color: #374151;
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status-info {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #dbeafe;
+        }
+
+        .status-success {
+            background: #f0fdf4;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+
+        .status-error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .status-warning {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .student-info {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-info h3 {
+            margin-bottom: 16px;
+            color: #374151;
+        }
+
+        .student-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #667eea;
+            margin: 0 auto 16px;
+            display: block;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .info-value {
+            color: #6b7280;
+            text-align: right;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .file-upload-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .file-upload-section h2 {
+            margin-bottom: 12px;
+            color: #374151;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f8fafc;
+        }
+
+        .upload-area.drag-over {
+            border-color: #667eea;
+            background: #eff6ff;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .help-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-section h3 {
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .help-section ul {
+            text-align: left;
+            color: #6b7280;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+
+        .help-section li {
+            margin-bottom: 8px;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .mobile-container {
+                padding: 12px;
+            }
+
+            .btn {
+                min-width: 180px;
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="header">
+            <h1>📱 Mobile Face Recognition</h1>
+            <p id="teacherInfo">Loading teacher information...</p>
+            <p><small>Access from: <span id="hostInfo">Unknown</span></small></p>
+        </div>
+
+        <!-- Camera Section -->
+        <div class="camera-section" id="cameraSection">
+            <h2>📷 Camera Access</h2>
+            <div class="video-container">
+                <video id="cameraVideo" autoplay playsinline muted></video>
+                <canvas id="captureCanvas"></canvas>
+            </div>
+
+            <div class="camera-controls">
+                <button id="startCameraBtn" class="btn btn-primary">
+                    📹 Start Camera
+                </button>
+                <button id="captureBtn" class="btn btn-success hidden">
+                    📸 Capture & Recognize
+                </button>
+                <button id="stopCameraBtn" class="btn btn-danger hidden">
+                    ⏹️ Stop Camera
+                </button>
+            </div>
+        </div>
+
+        <!-- File Upload Alternative -->
+        <div class="file-upload-section">
+            <h2>📤 Or Upload Photo</h2>
+            <p style="color: #6b7280; margin-bottom: 12px;">If camera doesn't work, upload a selfie</p>
+
+            <div class="upload-area" id="uploadArea">
+                <div style="font-size: 48px; margin-bottom: 12px;">📸</div>
+                <p style="color: #374151; font-weight: 600;">Click to select photo</p>
+                <p style="color: #6b7280; font-size: 14px;">or drag and drop here</p>
+            </div>
+
+            <input type="file" id="fileInput" accept="image/*" capture="user">
+            <img id="previewImage" class="preview-image hidden" />
+
+            <button id="uploadRecognizeBtn" class="btn btn-success hidden">
+                🔍 Recognize from Photo
+            </button>
+        </div>
+
+        <!-- Status Section -->
+        <div class="status-section">
+            <h3>Status</h3>
+            <div id="statusMessage" class="status-message status-info">
+                Ready - Choose camera or upload photo
+            </div>
+            <div id="backendStatus" class="status-message status-info">
+                Backend: <span id="backendUrl">Checking...</span>
+            </div>
+        </div>
+
+        <!-- Recognition Results -->
+        <div class="student-info">
+            <h3>Recognition Results</h3>
+            <div id="studentResults">
+                <p style="text-align: center; color: #6b7280; font-style: italic;">
+                    No recognition attempts yet
+                </p>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="help-section">
+            <h3>💡 Troubleshooting</h3>
+            <ul>
+                <li><strong>Camera not working?</strong> Use the "Upload Photo" option instead</li>
+                <li><strong>Permission denied?</strong> Check browser settings and allow camera access</li>
+                <li><strong>HTTPS required?</strong> Some browsers require secure connection for camera</li>
+                <li><strong>Best results:</strong> Good lighting, face clearly visible, look at camera</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let video = null;
+        let canvas = null;
+        let ctx = null;
+        let stream = null;
+        let selectedFile = null;
+
+        const startCameraBtn = document.getElementById('startCameraBtn');
+        const captureBtn = document.getElementById('captureBtn');
+        const stopCameraBtn = document.getElementById('stopCameraBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewImage = document.getElementById('previewImage');
+        const uploadRecognizeBtn = document.getElementById('uploadRecognizeBtn');
+        const teacherInfo = document.getElementById('teacherInfo');
+        const hostInfo = document.getElementById('hostInfo');
+        const backendUrl = document.getElementById('backendUrl');
+
+        function updateStatus(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message status-${type}`;
+        }
+
+        // Camera functionality
+        async function startCamera() {
+            try {
+                updateStatus('Requesting camera access...', 'info');
+
+                video = document.getElementById('cameraVideo');
+                canvas = document.getElementById('captureCanvas');
+                ctx = canvas.getContext('2d');
+
+                // Request camera access with mobile-optimized constraints
+                const constraints = {
+                    video: {
+                        facingMode: 'user',
+                        width: { ideal: 640, max: 1280 },
+                        height: { ideal: 480, max: 720 }
+                    },
+                    audio: false
+                };
+
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+
+                await new Promise((resolve) => {
+                    video.onloadedmetadata = resolve;
+                });
+
+                startCameraBtn.classList.add('hidden');
+                captureBtn.classList.remove('hidden');
+                stopCameraBtn.classList.remove('hidden');
+
+                updateStatus('Camera ready! Position your face and click capture', 'success');
+
+            } catch (error) {
+                console.error('Camera access error:', error);
+                let errorMsg = 'Camera access failed. ';
+
+                if (error.name === 'NotAllowedError') {
+                    errorMsg += 'Please allow camera permissions. Try using "Upload Photo" instead.';
+                } else if (error.name === 'NotFoundError') {
+                    errorMsg += 'No camera found. Use "Upload Photo" option below.';
+                } else if (error.name === 'NotSupportedError') {
+                    errorMsg += 'Camera not supported. Use "Upload Photo" option below.';
+                } else {
+                    errorMsg += 'Please use "Upload Photo" option below.';
+                }
+
+                updateStatus(errorMsg, 'warning');
+            }
+        }
+
+        async function captureAndRecognize() {
+            if (!video || !canvas) return;
+
+            try {
+                updateStatus('Capturing image...', 'info');
+                captureBtn.disabled = true;
+                captureBtn.innerHTML = '<div class="loading"></div> Processing...';
+
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob(async (blob) => {
+                    if (!blob) {
+                        updateStatus('Failed to capture image', 'error');
+                        resetCaptureButton();
+                        return;
+                    }
+
+                    await sendImageForRecognition(blob);
+                    resetCaptureButton();
+                }, 'image/jpeg', 0.8);
+
+            } catch (error) {
+                console.error('Capture error:', error);
+                updateStatus('Failed to capture image', 'error');
+                resetCaptureButton();
+            }
+        }
+
+        function resetCaptureButton() {
+            captureBtn.disabled = false;
+            captureBtn.innerHTML = '📸 Capture & Recognize';
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+
+            if (video) {
+                video.srcObject = null;
+            }
+
+            startCameraBtn.classList.remove('hidden');
+            captureBtn.classList.add('hidden');
+            stopCameraBtn.classList.add('hidden');
+
+            updateStatus('Camera stopped', 'info');
+        }
+
+        // File upload functionality
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            if (!file.type.startsWith('image/')) {
+                updateStatus('Please select an image file', 'error');
+                return;
+            }
+
+            selectedFile = file;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                previewImage.classList.remove('hidden');
+                uploadRecognizeBtn.classList.remove('hidden');
+                updateStatus('Photo selected! Click "Recognize from Photo"', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        uploadRecognizeBtn.addEventListener('click', async () => {
+            if (!selectedFile) {
+                updateStatus('Please select a photo first', 'error');
+                return;
+            }
+
+            uploadRecognizeBtn.disabled = true;
+            uploadRecognizeBtn.innerHTML = '<div class="loading"></div> Processing...';
+
+            await sendImageForRecognition(selectedFile);
+
+            uploadRecognizeBtn.disabled = false;
+            uploadRecognizeBtn.innerHTML = '🔍 Recognize from Photo';
+        });
+
+        // Send image for recognition
+        async function sendImageForRecognition(imageBlob) {
+            try {
+                updateStatus('Recognizing face...', 'info');
+
+                const formData = new FormData();
+                formData.append('image', imageBlob, 'capture.jpg');
+
+                // You'll need to update this URL to match your backend endpoint
+                const response = await fetch('/mobile_recognize', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    displayRecognitionResult(result);
+                    if (result.recognized) {
+                        updateStatus(`✅ ${result.message}`, 'success');
+                    } else {
+                        updateStatus(`⚠️ ${result.message}`, 'warning');
+                    }
+                } else {
+                    updateStatus(result.message || 'Recognition failed', 'error');
+                }
+
+            } catch (error) {
+                console.error('Recognition error:', error);
+                updateStatus('Failed to connect to recognition service', 'error');
+            }
+        }
+
+        function displayRecognitionResult(result) {
+            const resultsDiv = document.getElementById('studentResults');
+            const timestamp = new Date().toLocaleTimeString();
+
+            let html = `
+                <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <strong>${result.recognized ? '✅ Recognized' : '❌ Not Recognized'}</strong>
+                        <small style="color: #6b7280;">${timestamp}</small>
+                    </div>
+            `;
+
+            if (result.recognized) {
+                // Extract student name from the response
+                let studentName = "N/A";
+                
+                // Try different possible locations for the name
+                if (result.student_data && result.student_data.name) {
+                    studentName = result.student_data.name;
+                } else if (result.name) {
+                    studentName = result.name;
+                } else if (result.student_name) {
+                    studentName = result.student_name;
+                }
+
+                html += `
+                    <img src="/static/student_images/${result.student_id}.png"
+                         class="student-photo"
+                         onerror="this.src='/static/student_images/default.png'" />
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Student ID:</span>
+                            <span class="info-value">${result.student_id}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Name:</span>
+                            <span class="info-value">${studentName}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Confidence:</span>
+                            <span class="info-value">${(result.confidence * 100).toFixed(1)}%</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value" style="color: #059669; font-weight: 600;">${result.attendance_status}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="info-item">
+                        <span class="info-label">Result:</span>
+                        <span class="info-value">${result.student_id || 'Unknown'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Confidence:</span>
+                        <span class="info-value">${result.confidence ? (result.confidence * 100).toFixed(1) + '%' : 'N/A'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Message:</span>
+                        <span class="info-value">${result.message || 'No match found'}</span>
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+
+            if (resultsDiv.innerHTML.includes('No recognition attempts yet')) {
+                resultsDiv.innerHTML = html;
+            } else {
+                resultsDiv.innerHTML = html + resultsDiv.innerHTML;
+            }
+        }
+
+        // Event listeners
+        startCameraBtn.addEventListener('click', startCamera);
+        captureBtn.addEventListener('click', captureAndRecognize);
+        stopCameraBtn.addEventListener('click', stopCamera);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Mobile face recognition page loaded');
+            
+            // Set host information
+            hostInfo.textContent = window.location.host;
+            backendUrl.textContent = window.location.host;
+
+            // Check camera support but don't disable - offer upload alternative
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                updateStatus('Camera API not available. Please use "Upload Photo" option.', 'warning');
+                document.getElementById('cameraSection').style.opacity = '0.6';
+            }
+            
+            // You would typically fetch teacher information from your backend here
+            // For now, we'll set a placeholder
+            teacherInfo.textContent = 'Teacher - Subject';
+        });
+    </script>
+</body>
+</html>

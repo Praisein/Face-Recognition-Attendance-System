@@ -1,0 +1,380 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Profile - Attendance System{% endblock %}
+
+{% block body_class %}teacher-profile-page{% endblock %}
+
+{% block extra_css %}
+<style>
+    .teacher-profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        text-align: center;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .header p {
+        font-size: 16px;
+        opacity: 0.9;
+    }
+
+    .profile-section {
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .profile-img {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 5px solid #667eea;
+        overflow: hidden;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .teacher-name {
+        font-size: 28px;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 5px;
+    }
+
+    .teacher-id {
+        font-size: 18px;
+        color: #6b7280;
+        margin-bottom: 15px;
+    }
+
+    .teacher-username {
+        display: flex;
+        align-items: center;
+        background-color: #f8fafc;
+        padding: 8px 15px;
+        border-radius: 50px;
+        margin-bottom: 10px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .options-section {
+        background: white;
+        padding: 30px;
+    }
+
+    .option-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #374151;
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown {
+        margin-bottom: 30px;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+
+    .dropdown-header {
+        background-color: #f8fafc;
+        padding: 15px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-header:hover {
+        background-color: #f3f4f6;
+    }
+
+    .dropdown-header h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dropdown-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background-color: #f9fafb;
+    }
+
+    .dropdown.active .dropdown-content {
+        max-height: 500px;
+    }
+
+    .dropdown.active .dropdown-header {
+        background-color: #f3f4f6;
+    }
+
+    .subjects-list {
+        padding: 20px;
+    }
+
+    .subject-item {
+        padding: 10px 15px;
+        background-color: white;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid #f3f4f6;
+    }
+
+    .subject-item:hover {
+        background-color: #f8fafc;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6b7280;
+    }
+
+    .empty-state svg {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+        color: #d1d5db;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        padding: 30px;
+        gap: 15px;
+        background: white;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+        background-color: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+        background-color: #667eea;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .teacher-profile-container {
+            padding: 16px;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .teacher-name {
+            font-size: 24px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .dropdown-header h3 {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="teacher-profile-container">
+    <div class="header">
+        <h1>Teacher Profile</h1>
+        <p>View and manage your teaching information</p>
+    </div>
+    
+    <div class="profile-section">
+        <div class="profile-img">
+            <!-- DYNAMIC TEACHER IMAGE -->
+            {% if teacher_data.photo %}
+                <img src="{{ teacher_data.photo }}" alt="Teacher Profile Picture">
+            {% else %}
+                <!-- Default placeholder image -->
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Teacher Profile Picture">
+            {% endif %}
+        </div>
+        
+        <!-- DYNAMIC TEACHER NAME -->
+        <h2 class="teacher-name">{{ teacher_data.name or session.get('teacher_name', session.get('username', 'Teacher')) }}</h2>
+        
+        <!-- DYNAMIC TEACHER ID -->
+        <p class="teacher-id">Teacher ID: {{ teacher_data.id or session.get('teacher_id', 'N/A') }}</p>
+        
+        <!-- DYNAMIC USERNAME -->
+        <div class="teacher-username">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            <span>Username: {{ teacher_data.username or session.get('username', 'N/A') }}</span>
+        </div>
+    </div>
+    
+    <div class="options-section">
+        <h2 class="option-title">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Profile Options
+        </h2>
+        
+        <div class="dropdown" id="subjects-dropdown">
+            <div class="dropdown-header">
+                <h3>
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    Your Subjects
+                </h3>
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+            <div class="dropdown-content">
+                <div class="subjects-list">
+                    <!-- DYNAMIC SUBJECTS DATA -->
+                    {% if teacher_data.subjects and teacher_data.subjects|length > 0 %}
+                        {% for subject in teacher_data.subjects %}
+                        <div class="subject-item">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            <span>{{ subject }}</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                            <p>No subjects assigned yet</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <a href="{{ url_for('select_subject') }}" class="btn btn-primary">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Select Subject
+        </a>
+        <button class="btn btn-secondary">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            Edit Profile
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Dropdown functionality
+    document.querySelectorAll('.dropdown-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const dropdown = header.parentElement;
+            dropdown.classList.toggle('active');
+        });
+    });
+
+    // Add hover effects to buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.btn');
+        
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        console.log('Teacher Profile page loaded successfully');
+    });
+</script>
+{% endblock %}

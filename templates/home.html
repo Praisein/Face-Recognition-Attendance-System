@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Attendance System{% endblock %}
+
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .col-md-4 {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .col-md-8 {
+        flex: 2;
+        min-width: 300px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .card-content {
+        padding: 24px;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .teacher-profile-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #667eea;
+        margin: 0 auto 16px;
+    }
+
+    .teacher-profile-default {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        border: 4px solid #e5e7eb;
+    }
+
+    .profile-icon {
+        width: 60px;
+        height: 60px;
+        color: #9ca3af;
+    }
+
+    .card-content h4 {
+        color: #374151;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .text-muted {
+        color: #6b7280;
+        margin-bottom: 8px;
+    }
+
+    .current-subject {
+        margin-top: 16px;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 8px 16px;
+        background: #667eea;
+        color: white;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .w-full {
+        width: 100%;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        text-align: center;
+        flex: 1;
+        min-width: 140px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-outline {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .btn-outline:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .flex-1 {
+        flex: 1;
+    }
+
+    .mt-4 {
+        margin-top: 24px;
+    }
+
+    h6 {
+        color: #374151;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .recent-activity {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 16px;
+        border-left: 4px solid #667eea;
+    }
+
+    .recent-activity p {
+        margin: 0;
+        color: #6b7280;
+        line-height: 1.5;
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            padding: 16px;
+        }
+
+        .row {
+            flex-direction: column;
+        }
+
+        .col-md-4, .col-md-8 {
+            min-width: 100%;
+        }
+
+        .btn-group {
+            flex-direction: column;
+        }
+
+        .btn {
+            min-width: 100%;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+    }
+
+    /* Animation for cards */
+    .card {
+        animation: fadeInUp 0.6s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Teacher Profile Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Teacher Profile</h5>
+                </div>
+                <div class="card-content text-center">
+                    {% if session.get('teacher_image') %}
+                    <img src="{{ url_for('static', filename='teacher_images/' + session.teacher_image) }}"
+                         alt="Teacher Photo" class="teacher-profile-image"
+                         onerror="this.style.display='none'">
+                    {% else %}
+                    <div class="teacher-profile-default">
+                        <svg class="profile-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    {% endif %}
+
+                    <h4>{{ session.get('teacher_name', session.get('username', 'Teacher')) }}</h4>
+
+                    {% if session.get('teacher_id') %}
+                    <p class="text-muted">ID: {{ session.teacher_id }}</p>
+                    {% endif %}
+
+                    {% if session.get('department') %}
+                    <p class="text-muted">Department: {{ session.department }}</p>
+                    {% endif %}
+
+                    {% if session.get('selected_subject') or session.get('lecture') %}
+                    <div class="current-subject">
+                        <span class="badge">
+                            {{ session.get('selected_subject', session.get('lecture', '')) }}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- Quick Actions Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Quick Actions</h5>
+                </div>
+                <div class="card-content">
+                    <div class="btn-group w-full">
+                        <a href="{{ url_for('mark_attendance') }}" class="btn btn-primary">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Mark Attendance
+                        </a>
+                        <a href="{{ url_for('attendance_records') }}" class="btn btn-outline">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            View Records
+                        </a>
+                        <a href="{{ url_for('manage_students') }}" class="btn btn-outline">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                            Manage Students
+                        </a>
+                    </div>
+
+                    <div class="mt-4">
+                        <h6>Recent Activity</h6>
+                        <div class="recent-activity">
+                            <p>Welcome to the Attendance System. Use the buttons above to manage student attendance efficiently.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Dashboard loaded successfully');
+        
+        // Add some interactive effects
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Check if teacher image failed to load and show default
+        const teacherImage = document.querySelector('.teacher-profile-image');
+        if (teacherImage) {
+            teacherImage.addEventListener('error', function() {
+                this.style.display = 'none';
+                const defaultDiv = document.createElement('div');
+                defaultDiv.className = 'teacher-profile-default';
+                defaultDiv.innerHTML = `
+                    <svg class="profile-icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                `;
+                this.parentNode.insertBefore(defaultDiv, this.nextSibling);
+            });
+        }
+    });
+</script>
+{% endblock %}

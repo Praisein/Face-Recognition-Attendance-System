@@ -1,0 +1,33 @@
+# -------------------------
+# Python cache and build
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# -------------------------
+# IDE / Environment configs
+# -------------------------
+.idea/
+.vscode/
+.env
+
+# -------------------------
+# Sensitive or private data
+# -------------------------
+EncodeFile.p
+
+# -------------------------
+# Model weights
+# -------------------------
+models/
+*.pt
+*.pth
+
+# -------------------------
+# Temporary / debug files
+# -------------------------
+*.log
+*.tmp
