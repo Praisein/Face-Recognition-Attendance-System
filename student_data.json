@@ -1,13 +1,13 @@
 {
   "2324": {
     "BSCIT-020": {
-      "name": "Praisein Nadar",
+      "name": "",
       "year": "F.Y",
-      "image_path": "student_images/BSCIT-020.png", "_comment": "these images should be in static/student_images",
+      "image_path": "student_images/BSCIT-002.png", "_comment": "these images should be in static/student_images",
       "total_attendance": 0
     },
     "BSCIT-001": {
-      "name": "Chrispin Nadar",
+      "name": "",
       "year": "F.Y",
       "image_path": "student_images/BSCIT-001.png", "_comment": "these images should be in static/student_images",
       "total_attendance": 0
