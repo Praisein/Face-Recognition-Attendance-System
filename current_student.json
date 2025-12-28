@@ -1,3 +1,12 @@
 {
-  
+  "student_id": "BSCIT-001",
+  "name": "Chrispin Nadar",
+  "batch": "2324",
+  "year": "F.Y",
+  "selective": [],
+  "image_path": "static/student_images/BSCIT-001.png",
+  "total_attendance": 0,
+  "last_attendance_time": "",
+  "teacher_name": "Praisein",
+  "lecture": "Digital Electronics"
 }

@@ -14,10 +14,13 @@ __pycache__/
 .vscode/
 .env
 
+/static/
 # -------------------------
 # Sensitive or private data
 # -------------------------
 EncodeFile.p
+student_data.json
+teacher_data.json
 
 # -------------------------
 # Model weights

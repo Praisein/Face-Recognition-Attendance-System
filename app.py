@@ -22,27 +22,15 @@ import json
 import os
 from datetime import datetime
 from attendance_system import main as attendance_main, atomic_write_json, load_student_data, save_student_data
-from curriculum_toggle import get_state as get_curriculum_state, toggle_curriculum
+from curriculum_toggle import get_state as get_curriculum_state, toggle as toggle_curriculum
 # Import IP access control
 from ip_access_control import (
     enable_mobile_access, disable_mobile_access, 
-    get_access_status, is_mobile_access_enabled
-)
-
-try:
-    from curriculum_toggle import get_state as get_curriculum_state, toggle as toggle_curriculum
-except Exception:
-    # If import fails, provide fallbacks
-    def get_curriculum_state():
-        return {'current_side': 'odd', 'odd_true': 0, 'even_true': 0, 'semesters_total': 0}
-    def toggle_curriculum():
-        return 'odd'
-from ip_access_control import (
+    get_access_status, is_mobile_access_enabled,
     check_mobile_access, 
     is_localhost, 
     is_network_device,
-    get_lan_ip,
-    get_access_status
+    get_lan_ip
 )
 from flask import render_template_string, abort
 

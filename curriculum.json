@@ -1,9 +1,9 @@
 {
-  "_comment":"use year of the batch according to you for me it was First Year Second Year etc so F.Y, S.Y, T.Y",
+  "_comment": "use year of the batch according to you for me it was First Year Second Year etc so F.Y, S.Y, T.Y",
   "F.Y": {
     "Semesters": {
       "Sem-1": {
-        "Current": true,
+        "Current": false,
         "Theory": [
           "Programming Principles with C (Theory)",
           "Operating System (Theory)",
@@ -22,7 +22,7 @@
         ]
       },
       "Sem-2": {
-        "Current": false,
+        "Current": true,
         "Theory": [
           "OOPs with C++(Theory)",
           "Web Designing & development(Theory)",
@@ -40,7 +40,7 @@
   "S.Y": {
     "Semesters": {
       "Sem-3": {
-        "Current": true,
+        "Current": false,
         "Theory": [
           "Data Structure and Algorithm",
           "Numerical & Statistical methods",
@@ -53,7 +53,7 @@
         ]
       },
       "Sem-4": {
-        "Current": false,
+        "Current": true,
         "Theory": [
           "Introduction to Machine Learning",
           "Discrete Mathematics",
@@ -70,7 +70,7 @@
   "T.Y": {
     "Semesters": {
       "Sem-5": {
-        "Current": true,
+        "Current": false,
         "Theory": [
           "Artificial Intelligence",
           "Enterprise java",
@@ -83,7 +83,7 @@
         ]
       },
       "Sem-6": {
-        "Current": false,
+        "Current": true,
         "Theory": [
           "Software Quality Assurance",
           "Business Intelligence",

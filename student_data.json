@@ -1,12 +1,17 @@
 {
-  "put the academic batch of students here for e.g 1516 or 2122": {
-    "student_id": {
-      "name": "",
-      "year": "",
-      "image_path": "student_images", "_comment": "these images should be in static/student_images",
+  "2324": {
+    "BSCIT-020": {
+      "name": "Praisein Nadar",
+      "year": "F.Y",
+      "image_path": "student_images/BSCIT-020.png", "_comment": "these images should be in static/student_images",
       "total_attendance": 0
     },
-    "you can out more stendents data":"using the same format"
+    "BSCIT-001": {
+      "name": "Chrispin Nadar",
+      "year": "F.Y",
+      "image_path": "student_images/BSCIT-001.png", "_comment": "these images should be in static/student_images",
+      "total_attendance": 0
+    }
   },
   "you can start another batch of students from here":"its the same format"
 }
