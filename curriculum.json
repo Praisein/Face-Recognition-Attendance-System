@@ -3,7 +3,7 @@
   "F.Y": {
     "Semesters": {
       "Sem-1": {
-        "Current": false,
+        "Current": true,
         "Theory": [
           "Programming Principles with C (Theory)",
           "Operating System (Theory)",
@@ -22,7 +22,7 @@
         ]
       },
       "Sem-2": {
-        "Current": true,
+        "Current": false,
         "Theory": [
           "OOPs with C++(Theory)",
           "Web Designing & development(Theory)",
@@ -40,7 +40,7 @@
   "S.Y": {
     "Semesters": {
       "Sem-3": {
-        "Current": false,
+        "Current": true,
         "Theory": [
           "Data Structure and Algorithm",
           "Numerical & Statistical methods",
@@ -53,7 +53,7 @@
         ]
       },
       "Sem-4": {
-        "Current": true,
+        "Current": false,
         "Theory": [
           "Introduction to Machine Learning",
           "Discrete Mathematics",
@@ -70,7 +70,7 @@
   "T.Y": {
     "Semesters": {
       "Sem-5": {
-        "Current": false,
+        "Current": true,
         "Theory": [
           "Artificial Intelligence",
           "Enterprise java",
@@ -83,7 +83,7 @@
         ]
       },
       "Sem-6": {
-        "Current": true,
+        "Current": false,
         "Theory": [
           "Software Quality Assurance",
           "Business Intelligence",
